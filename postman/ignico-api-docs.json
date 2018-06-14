@@ -1,0 +1,1045 @@
+{
+  "info": {
+    "_postman_id": "0912c05c-c4a1-4dd7-8ce4-f3f0f9f31b47",
+    "name": "Ignico API Documentation",
+    "description": "Each Ignico instance exposes API for developers to consume in their applications.\n\nThe API allows you to automate some tasks you typically would do through Ignico web app interface like:\n- batch import of your data to your app,\n- get your calculation results, user actions, rewards etc.\n\nYou can check here what resources you can interact with and how your requests should look like.\n\n\n\n## Authorization\n\nIf you are a customer and have your own Ignico workspace set, you or one of your administrators have to create an API Key first.\n\nTo access any endpoint (except fetching access token) you have to be authorized. We use [The OAuth 2.0 Authorization Framework](https://tools.ietf.org/html/rfc6749) to grant you access.\n\n\n\n## Conventions\n\nAll communication is done in REST way and JSON format is used for each request and response.\n\nEvery endpoint conforms to open source JSON API 1.0 Specification. You can find everything you need to know about this format in official docs on http://jsonapi.org.\n\n\n\n## Filtering\n\nJSON API does not impose filtering params format (http://jsonapi.org/format/#fetching-filtering) so we chose to use it in array like notation.\n\nTo use a filter `someFilter` you need to send it as `filter[someFilter]=someValue` query parameter.\n\nOf course you can combine multiple filters like this:\n\n`?filter[someFilter]=someValue&filter[otherFilter]=otherValue`\n\n\n\n## Pagination\n\nJSON API is agnostic about pagination strategy (http://jsonapi.org/format/#fetching-pagination) too so we chose to use page-based strategy.\n\nBy default you will fetch first page and first 25 records (other default page size can be specified by endpoints). You can get information about total records count, current page or current page size from `meta` (http://jsonapi.org/format/#document-meta) information.\n\nTo fetch other pages or more data you need to send it as `page[number]=2&page[size]=10` query parameters.\n\nMaximum page size may be limited and can be specified by endpoints to prevent sending too much data over single request.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "_postman_id": "6e1f6d1d-0683-47d3-a29e-60ccb681f800",
+      "name": "Authorization",
+      "description": "To interact with other endpoints your requests have to be authorized using OAuth2 access token.\n\nTo obtain a token your application can get it in exchange for API Keys using client credentials grant (id and secret).",
+      "item": [
+        {
+          "_postman_id": "5db785df-c269-4126-a8dd-d59164d3aa33",
+          "name": "Issue new access token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "2977f68a-4591-416e-a28f-af08d9d171d0",
+                "type": "text/javascript",
+                "exec": [
+                  "tests[\"Successful POST request\"] = responseCode.code === 200;",
+                  "",
+                  "var jsonData = JSON.parse(responseBody);",
+                  "var schema = {",
+                  " \"access_token\": {",
+                  "   \"type\": \"string\"",
+                  " }",
+                  "};",
+                  "tests[\"Issued Access Token\"] = tv4.validate(jsonData, schema);",
+                  "",
+                  "if (tv4.error) {",
+                  "    console.log(\"Validation failed: \", tv4.error);   ",
+                  "}",
+                  "",
+                  "tests[\"Issued Bearer token\"] = jsonData.token_type == \"Bearer\";",
+                  "",
+                  "postman.setGlobalVariable(\"access_token\", jsonData.access_token);",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials",
+                  "type": "text",
+                  "description": "Currently this is the only one available grant type"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{client_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{client_secret}}",
+                  "type": "text",
+                  "description": ""
+                }
+              ]
+            },
+            "url": "https://{{workspace}}.igni.co/api/v1/oauth2/token",
+            "description": "Sign in using OAuth2 client credentials grant and fetch access token"
+          },
+          "response": []
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "4f96c7b1-8c43-4c31-ab34-36d8c87725a3",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "0c6e3768-a1ac-427a-8fc3-6210609c54c4",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "_postman_id": "fea5059a-fdc5-4081-a04c-42f45f0fcac2",
+      "name": "Resources",
+      "description": "Manage or view your instance resources.\n\n**All endpoints require Bearer access token.**",
+      "item": [
+        {
+          "_postman_id": "1decca58-56f3-45a2-9af0-cdbb03a55a90",
+          "name": "Actions",
+          "description": "Manage Actions that your users have taken.\n\nMay it be a sale, a lead, a meeting or any other activity you wish to use to reward your user.",
+          "item": [
+            {
+              "_postman_id": "0932ca31-b067-44ab-9a62-4ecab10539e6",
+              "name": "List all actions",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "c8719738-ab1a-485e-a80d-fcfbea5bb25d",
+                    "type": "text/javascript",
+                    "exec": [
+                      "tests[\"Successful request\"] = responseCode.code === 200;"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "grant_type",
+                      "value": "password",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "7ec39be9-d753-4033-8167-34b378079bf7",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "mahakam",
+                      "type": "text"
+                    },
+                    {
+                      "key": "username",
+                      "value": "coders@igni.co",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "password123",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "https://{{workspace}}.igni.co/api/v1/actions",
+                "description": "**Available filters**\n\n| Name                    | Type   | Description                                                             |\n|-------------------------|--------|-------------------------------------------------------------------------|\n| id                      | string | Action UUID                                                             |\n| cancelled               | int    | 1 = true, 0 = false                                                     |\n| performerEmail          | string | E-mail of user performing actions                                       |\n| paramsValueGreaterEqual | mixed  | `>=` Value that can be compared with Action value (if exists)           |\n| paramsValueLessEqual    | mixed  | `<=` Value that can be compared with Action value (if exists)           |\n| takenAtGreaterEqual     | string | `>=` Date when Action was taken (`YYYY-MM-DD hh:mm:ss` 24hr format)     |\n| takenAtLessEqual        | string | `<=` Date when Action was taken (`YYYY-MM-DD hh:mm:ss` 24hr format)     |\n| cancelledAtGreaterEqual | string | `>=` Date when Action was cancelled (`YYYY-MM-DD hh:mm:ss` 24hr format) |\n| cancelledAtLessEqual    | string | `<=` Date when Action was cancelled (`YYYY-MM-DD hh:mm:ss` 24hr format) |\n\n**Available sortings**\n\n* id\n* cancelled\n* takenAt\n* createdAt"
+              },
+              "response": []
+            },
+            {
+              "_postman_id": "2e74e1d0-1895-41ab-97b9-6fcc66074545",
+              "name": "Fetch single action",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "f88da998-7fbc-458c-9acc-41f1ce3ddd37",
+                    "type": "text/javascript",
+                    "exec": [
+                      "tests[\"Successful request\"] = responseCode.code === 200;"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "grant_type",
+                      "value": "password",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "7ec39be9-d753-4033-8167-34b378079bf7",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "mahakam",
+                      "type": "text"
+                    },
+                    {
+                      "key": "username",
+                      "value": "coders@igni.co",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "password123",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "https://{{workspace}}.igni.co/api/v1/actions/{{action_id}}"
+              },
+              "response": []
+            },
+            {
+              "_postman_id": "d8299de6-77fe-4085-a89b-ebac77daad82",
+              "name": "Create an action",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "6a4b5f0d-3f74-47d1-a565-3732d636a254",
+                    "type": "text/javascript",
+                    "exec": [
+                      "tests[\"Successful request\"] = responseCode.code === 200;"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"action\",\n    \"attributes\": {\n      \"type\": \"action_type\",\n        \"title\": \"action_title\",\n        \"takenAt\": \"YYYY-MM-DD HH:MM:SS\",\n        \"performer\":  {\n            \"email\": \"some_email\"\n        },\n        \"params\": {\n            \"value\": \"some_value\"\n        }\n    }\n  }\n}"
+                },
+                "url": "https://{{workspace}}.igni.co/api/v1/actions",
+                "description": "**Request parameters**\n\n| Parameter                  | Type   | Description                               |\n|----------------------------|--------|-------------------------------------------|\n| type                       | string | `action`                                  |\n| attributes.type            | string | Can be `transaction` or `event`           |\n| attributes.title           | string | Title of the Action                       |\n| attributes.takenAt         | string | Date when the Action was taken            |\n| attributes.performer.email | int    | Email of User that performed the Action   |\n| attributes.params.value    | mixed  | Value (only for `transaction` type)       |"
+              },
+              "response": [
+                {
+                  "id": "545ac4a0-bbb7-4a0f-a959-485b39fd942a",
+                  "name": "Sample transaction",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/vnd.api+json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"data\": {\n    \"type\": \"action\",\n    \"attributes\": {\n    \t\"type\": \"transaction\",\n        \"title\": \"Purchase\",\n        \"takenAt\": \"2018-05-06 22:46:25\",\n        \"performer\": {\n        \t\"email\": \"performer@example.com\"\n        },\n        \"params\": {\n            \"value\": 7419.22\n        }\n    }\n  }\n}"
+                    },
+                    "url": "https://{{workspace}}.igni.co/api/v1/actions"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": ""
+                },
+                {
+                  "id": "22bad6f8-b50a-4761-a5b8-592eaa5dac13",
+                  "name": "Sample event",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/vnd.api+json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"data\": {\n    \"type\": \"action\",\n    \"attributes\": {\n    \t\"type\": \"event\",\n        \"title\": \"User attended meeting\",\n        \"takenAt\": \"2018-05-06 22:46:25\",\n        \"performer\": {\n        \t\"email\": \"performer@example.com\"\n        }\n    }\n  }\n}"
+                    },
+                    "url": "https://{{workspace}}.igni.co/api/v1/actions"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": ""
+                }
+              ]
+            },
+            {
+              "_postman_id": "ce1d014f-99e5-4684-bde0-a28ba0e53865",
+              "name": "Cancel the action",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "7ee90285-3ee4-4fe0-b120-312748d8051a",
+                    "type": "text/javascript",
+                    "exec": [
+                      "tests[\"Successful request\"] = responseCode.code === 200;"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"action\",\n    \"attributes\": {\n        \"cancelled\": \"1\"\n    }\n  }\n}"
+                },
+                "url": "https://{{workspace}}.igni.co/api/v1/actions/{{action_id}}"
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "f0579576-e2e5-4842-82d4-c534ae7300ac",
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "3e9bebba-a854-47b1-bd73-dd386b9acf0e",
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            }
+          ],
+          "_postman_isSubFolder": true
+        },
+        {
+          "_postman_id": "d7596372-c727-4cb9-ab1f-2d35c97fa36f",
+          "name": "Users",
+          "description": "",
+          "item": [
+            {
+              "_postman_id": "f3365249-0d8b-4149-8afe-7e2356a166cb",
+              "name": "List of all users",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "22c2d647-8f50-4870-9e94-68d4b0b0501d",
+                    "type": "text/javascript",
+                    "exec": [
+                      ""
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "grant_type",
+                      "value": "password",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "7ec39be9-d753-4033-8167-34b378079bf7",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "mahakam",
+                      "type": "text"
+                    },
+                    {
+                      "key": "username",
+                      "value": "coders@igni.co",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "password123",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "https://{{workspace}}/api/v1/users",
+                "description": "**Available filters**\n\n| Name                    | Type   | Description                                                             |\n|-------------------------|--------|-------------------------------------------------------------------------|\n| id                      | int    | User ID                                                                 |\n| email                   | string | Email of the searched user                                              |\n| nameDisplay             | string | Name displayed eg Blanca Ojeda                                          |\n| referralCode            | string | User referral code eg ES-M0IX80J7-21                                    |\n| countryId               | string | Country code in ISO 3166-1 alpha-2 standard                             |\n| createdFrom        | string | `>=` Date when User was created (`YYYY-MM-DD hh:mm:ss` 24hr format)     |\n| createdTo               | string | `<=` Date when User was created (`YYYY-MM-DD hh:mm:ss` 24hr format)     |\n| active                  | int    | User activity status (1 = true, 0 = false)                              |\n| activatedFrom           | string | `>=` Date when User was activated (`YYYY-MM-DD hh:mm:ss` 24hr format)   |\n| activatedTo        | string | `<=` Date when User was activated (`YYYY-MM-DD hh:mm:ss` 24hr format)   |\n| banned                  | int    | User ban status (1 = true, 0 = false)                                   |\n| bannedFrom              | string | `>=` Date when User was activated (`YYYY-MM-DD hh:mm:ss` 24hr format)   |\n| bannedTo           | string | `<=` Date when User was activated (`YYYY-MM-DD hh:mm:ss` 24hr format)   |\n\n**Available sortings**\n\n* id\n* email\n* nameDisplay\n* referralCode\n* countryId\n* createdAt\n* active\n* activatedAt\n* banned\n* bannedAt"
+              },
+              "response": []
+            },
+            {
+              "_postman_id": "d99c0a7a-b525-4263-a32e-e0f41c1cc868",
+              "name": "Fetch single user",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "1c941314-41e3-417b-88c4-c46b95e7453f",
+                    "type": "text/javascript",
+                    "exec": [
+                      ""
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "grant_type",
+                      "value": "password",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "7ec39be9-d753-4033-8167-34b378079bf7",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "mahakam",
+                      "type": "text"
+                    },
+                    {
+                      "key": "username",
+                      "value": "coders@igni.co",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "password123",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "https://{{workspace}}/api/v1/users/{{user_id}}"
+              },
+              "response": []
+            },
+            {
+              "_postman_id": "5f14e2a0-5e6f-4de0-8fea-00774c78c9c1",
+              "name": "Create a user",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "91833fe3-9e11-4e0d-aa15-e24ecd907ec3",
+                    "type": "text/javascript",
+                    "exec": [
+                      ""
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"password\": \"FqdX+8dh4KjyHYuR\",\n        \"country\": \"US\",\n        \"subject\": {\n          \"person\": {\n            \"firstName\": \"Blanca\",\n            \"lastName\": \"Ojeda\"\n          }\n        },\n        \"referrer\": {\n            \"email\": \"madelene.nyberg@example.com\"\n        }\n    }\n  }\n}"
+                },
+                "url": "https://{{workspace}}/api/v1/users",
+                "description": "**Required parameters**\n\n| Parameter                  | Type   | Description                                 |\n|----------------------------|--------|---------------------------------------------|\n| type                       | string | Always will be `user` value                 |\n| attributes.email           | string | User email                                  |\n| attributes.country         | string | Country code in ISO 3166-1 alpha-2 standard |\n\n**Additional parameters**\n\nPassword\n\n| Parameter                  | Type   | Description                                 |\n|----------------------------|--------|---------------------------------------------|\n| attributes.password        | string | User password                               |\n\nIf you omit the `password`, we will send the user an email with the link to set `password` on his own\n\n--------------\n\nReferrer\n\n| Parameter                        | Type   | Description                                            |\n|----------------------------------|--------|--------------------------------------------------------|\n| attributes.referrer.email        | string | Email of the referring user                            |\n| attributes.referrer.referralCode | string | ReferralCode of the referring user eg `PL-D9HC56H9-78` |\n\nIn the request you can use only one of the above parameters.\n\nIf you do not choose the `referrer`, the user will be assigned to the default referrer.\n\n--------------\n\nAccount type - Person\n\n| Parameter                                | Type   | Description                                            |\n|------------------------------------------|--------|--------------------------------------------------------|\n| attributes.subject.person.firstName      | string | Email of the referring user                            |\n| attributes.subject.person.firstName      | string | ReferralCode of the referring user eg `PL-D9HC56H9-78` |\n\nAccount type - Company\n\n| Parameter                                | Type   | Description                                            |\n|------------------------------------------|--------|--------------------------------------------------------|\n| attributes.subject.company.name          | string | Email of the referring user                            |\n\nAccount type - Company with representative person\n\n| Parameter                                                  | Type   | Description                      |\n|------------------------------------------------------------|--------|----------------------------------|\n| attributes.subject.company.name                            | string | Company name                     |\n| attributes.subject.company.representativeSubject.firstName | string | Representative person first name |\n| attributes.subject.company.representativeSubject.lastName  | string | Representative person last name  |\n\nIf you do not choose the account type, user after logging in will be able to do it on his own."
+              },
+              "response": [
+                {
+                  "id": "04e74c3b-fe90-485f-a2f1-e18c64e732a4",
+                  "name": "Create a user with the referrer - Found by referralCode",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{access_token}}"
+                      },
+                      {
+                        "key": "Cookie",
+                        "value": "{{xdebug-cookie}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"country\": \"US\",\n        \"referrer\": {\n            \"referrerCode\": \"IS-I8DV62Y8-67\"\n        }\n    }\n  }\n}"
+                    },
+                    "url": "http://{{workspace}}/api/v1/users"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": ""
+                },
+                {
+                  "id": "1dc1328a-2d53-46ed-b0c6-4816da438178",
+                  "name": "Create a user with account type - Person",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{access_token}}"
+                      },
+                      {
+                        "key": "Cookie",
+                        "value": "{{xdebug-cookie}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"country\": \"US\",\n        \"subject\": {\n          \"person\": {\n            \"firstName\": \"Blanca\",\n            \"lastName\": \"Ojeda\"\n          }\n        }\n    }\n  }\n}"
+                    },
+                    "url": "http://{{workspace}}/api/v1/users"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": ""
+                },
+                {
+                  "id": "23ce1f63-9311-4fd8-a4aa-7d2272bc1551",
+                  "name": "The simplest form of user registration",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{access_token}}"
+                      },
+                      {
+                        "key": "Cookie",
+                        "value": "{{xdebug-cookie}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"data\": {\n        \"type\": \"user\",\n        \"attributes\": {\n            \"email\": \"blanca.ojeda@example.net\",\n            \"country\": \"US\"\n        }\n    }\n}"
+                    },
+                    "url": "http://{{workspace}}/api/v1/users"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": ""
+                },
+                {
+                  "id": "2655aaf3-ebd0-4548-b523-f0724187ca37",
+                  "name": "Create a user with account type - Company with representative person",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{access_token}}"
+                      },
+                      {
+                        "key": "Cookie",
+                        "value": "{{xdebug-cookie}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"country\": \"US\",\n        \"subject\": {\n          \"company\": {\n          \t\"name\" : \"Ignico\",\n          \t\"representativeSubject\" : {\n            \t\"firstName\": \"Blanca\",\n            \t\"lastName\": \"Ojeda\"\n          \t}\n          }\n        }\n    }\n  }\n}"
+                    },
+                    "url": "http://{{workspace}}/api/v1/users"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": ""
+                },
+                {
+                  "id": "3cfb52b0-a5dc-4180-ac9c-9e4f2dc2ed45",
+                  "name": "Create a user with account type - Company",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{access_token}}"
+                      },
+                      {
+                        "key": "Cookie",
+                        "value": "{{xdebug-cookie}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"country\": \"US\",\n        \"subject\": {\n          \"company\": {\n            \"name\": \"Ignico\"\n          }\n        }\n    }\n  }\n}"
+                    },
+                    "url": "http://{{workspace}}/api/v1/users"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": ""
+                },
+                {
+                  "id": "4170f155-4ec1-4efd-84fd-52c72ef394b4",
+                  "name": "Create a user with the password and account type ",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{access_token}}"
+                      },
+                      {
+                        "key": "Cookie",
+                        "value": "{{xdebug-cookie}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"password\": \"FqdX+8dh4KjyHYuR\",\n        \"country\": \"US\",\n        \"subject\": {\n          \"person\": {\n            \"firstName\": \"Blanca\",\n            \"lastName\": \"Ojeda\"\n          }\n        }\n    }\n  }\n}"
+                    },
+                    "url": "http://{{workspace}}/api/v1/users"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": ""
+                },
+                {
+                  "id": "4e0ab951-8d44-478f-a5c0-c9019084f26e",
+                  "name": "Create a user with the referrer - Found by email",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{access_token}}"
+                      },
+                      {
+                        "key": "Cookie",
+                        "value": "{{xdebug-cookie}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"country\": \"US\",\n        \"referrer\": {\n            \"email\": \"referrer@example.net\"\n        }\n    }\n  }\n}"
+                    },
+                    "url": "http://{{workspace}}/api/v1/users"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": ""
+                },
+                {
+                  "id": "69ebf1b4-8f67-4159-b38f-9972b33818ab",
+                  "name": "Create a user with password",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{access_token}}"
+                      },
+                      {
+                        "key": "Cookie",
+                        "value": "{{xdebug-cookie}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"password\": \"FqdX+8dh4KjyHYuR\",\n        \"country\": \"US\"\n    }\n  }\n}"
+                    },
+                    "url": "http://{{workspace}}/api/v1/users"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": ""
+                },
+                {
+                  "id": "87c8e73b-c56d-41f5-a3cc-a0168cede92b",
+                  "name": "Create a user with the referrer and account type ",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{access_token}}"
+                      },
+                      {
+                        "key": "Cookie",
+                        "value": "{{xdebug-cookie}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"country\": \"US\",\n        \"subject\": {\n          \"person\": {\n            \"firstName\": \"Blanca\",\n            \"lastName\": \"Ojeda\"\n          }\n        },\n        \"referrer\": {\n            \"email\": \"madelene.nyberg@example.com\"\n        }\n    }\n  }\n}"
+                    },
+                    "url": "http://{{workspace}}/api/v1/users"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": ""
+                },
+                {
+                  "id": "98507704-35ea-43d9-9d1e-a509807193c3",
+                  "name": "Create a user with the referrer, password and account type",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{access_token}}"
+                      },
+                      {
+                        "key": "Cookie",
+                        "value": "{{xdebug-cookie}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"password\": \"FqdX+8dh4KjyHYuR\",\n        \"country\": \"US\",\n        \"subject\": {\n          \"person\": {\n            \"firstName\": \"Blanca\",\n            \"lastName\": \"Ojeda\"\n          }\n        },\n        \"referrer\": {\n            \"email\": \"madelene.nyberg@example.com\"\n        }\n    }\n  }\n}"
+                    },
+                    "url": "http://{{workspace}}/api/v1/users"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": ""
+                },
+                {
+                  "id": "ddd504de-52aa-48a7-af84-87c6314d3a00",
+                  "name": "Create a user with the referrer and password",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/vnd.api+json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{access_token}}"
+                      },
+                      {
+                        "key": "Cookie",
+                        "value": "{{xdebug-cookie}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"password\": \"FqdX+8dh4KjyHYuR\",\n        \"country\": \"US\",\n        \"referrer\": {\n            \"email\": \"madelene.nyberg@example.com\"\n        }\n    }\n  }\n}"
+                    },
+                    "url": "http://{{workspace}}/api/v1/users"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": ""
+                }
+              ]
+            }
+          ],
+          "_postman_isSubFolder": true
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": {
+          "token": "{{access_token}}"
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "8ac39e35-5bcc-464a-b274-01ab154212b7",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "ab4d2ca8-7cb8-42fe-8e36-393d900cf6ab",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "7f6cacbd-5cc5-4197-9288-d10c9cf44b63",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "fbaad507-45ec-4ae9-b086-aa2d71970b0d",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
