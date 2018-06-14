@@ -409,7 +409,7 @@
           "item": [
             {
               "_postman_id": "f3365249-0d8b-4149-8afe-7e2356a166cb",
-              "name": "List of all users",
+              "name": "List all users",
               "event": [
                 {
                   "listen": "test",
@@ -594,10 +594,6 @@
                       {
                         "key": "Authorization",
                         "value": "Bearer {{access_token}}"
-                      },
-                      {
-                        "key": "Cookie",
-                        "value": "{{xdebug-cookie}}"
                       }
                     ],
                     "body": {
@@ -631,10 +627,6 @@
                       {
                         "key": "Authorization",
                         "value": "Bearer {{access_token}}"
-                      },
-                      {
-                        "key": "Cookie",
-                        "value": "{{xdebug-cookie}}"
                       }
                     ],
                     "body": {
@@ -668,10 +660,6 @@
                       {
                         "key": "Authorization",
                         "value": "Bearer {{access_token}}"
-                      },
-                      {
-                        "key": "Cookie",
-                        "value": "{{xdebug-cookie}}"
                       }
                     ],
                     "body": {
@@ -705,10 +693,6 @@
                       {
                         "key": "Authorization",
                         "value": "Bearer {{access_token}}"
-                      },
-                      {
-                        "key": "Cookie",
-                        "value": "{{xdebug-cookie}}"
                       }
                     ],
                     "body": {
@@ -742,10 +726,6 @@
                       {
                         "key": "Authorization",
                         "value": "Bearer {{access_token}}"
-                      },
-                      {
-                        "key": "Cookie",
-                        "value": "{{xdebug-cookie}}"
                       }
                     ],
                     "body": {
@@ -779,10 +759,6 @@
                       {
                         "key": "Authorization",
                         "value": "Bearer {{access_token}}"
-                      },
-                      {
-                        "key": "Cookie",
-                        "value": "{{xdebug-cookie}}"
                       }
                     ],
                     "body": {
@@ -816,10 +792,6 @@
                       {
                         "key": "Authorization",
                         "value": "Bearer {{access_token}}"
-                      },
-                      {
-                        "key": "Cookie",
-                        "value": "{{xdebug-cookie}}"
                       }
                     ],
                     "body": {
@@ -853,10 +825,6 @@
                       {
                         "key": "Authorization",
                         "value": "Bearer {{access_token}}"
-                      },
-                      {
-                        "key": "Cookie",
-                        "value": "{{xdebug-cookie}}"
                       }
                     ],
                     "body": {
@@ -890,10 +858,6 @@
                       {
                         "key": "Authorization",
                         "value": "Bearer {{access_token}}"
-                      },
-                      {
-                        "key": "Cookie",
-                        "value": "{{xdebug-cookie}}"
                       }
                     ],
                     "body": {
@@ -927,10 +891,6 @@
                       {
                         "key": "Authorization",
                         "value": "Bearer {{access_token}}"
-                      },
-                      {
-                        "key": "Cookie",
-                        "value": "{{xdebug-cookie}}"
                       }
                     ],
                     "body": {
@@ -964,10 +924,6 @@
                       {
                         "key": "Authorization",
                         "value": "Bearer {{access_token}}"
-                      },
-                      {
-                        "key": "Cookie",
-                        "value": "{{xdebug-cookie}}"
                       }
                     ],
                     "body": {
