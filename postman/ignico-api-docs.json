@@ -1078,6 +1078,45 @@
                 "url": "https://{{workspace}}.igni.co/api/v1/users/wallets/transactions/{{transaction_id}}"
               },
               "response": []
+            },
+            {
+              "_postman_id": "189050b5-2a9f-4863-8679-ce5cb5be9e9b",
+              "name": "Realize the wallet transaction",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "22c2d647-8f50-4870-9e94-68d4b0b0501d",
+                    "type": "text/javascript",
+                    "exec": [
+                      ""
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"transaction\",\n    \"attributes\": {\n      \"realized\": true\n    }\n  }\n}\n"
+                },
+                "url": "https://{{workspace}}.igni.co/api/v1/users/wallets/transactions/{{transaction_id}}"
+              },
+              "response": []
             }
           ],
           "_postman_isSubFolder": true
