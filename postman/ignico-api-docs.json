@@ -1002,7 +1002,7 @@
             },
             {
               "_postman_id": "546656ec-6032-4af1-965f-9d9d5a77eda3",
-              "name": "Create a transaction",
+              "name": "Create a wallet transaction",
               "event": [
                 {
                   "listen": "test",
