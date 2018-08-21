@@ -944,6 +944,13 @@
             }
           ],
           "_postman_isSubFolder": true
+        },
+        {
+          "_postman_id": "e4a4945a-7216-4a84-b406-693cb7af1366",
+          "name": "Wallets",
+          "description": "",
+          "item": [],
+          "_postman_isSubFolder": true
         }
       ],
       "auth": {
