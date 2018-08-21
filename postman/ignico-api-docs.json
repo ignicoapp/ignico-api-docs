@@ -960,6 +960,45 @@
                 "description": "**Available filters**\n\n| Name                  | Type   | Description                                                                |\n|-----------------------|--------|----------------------------------------------------------------------------|\n| id                    | int    | Transaction ID                                                             |\n| cancelled             | int    | Transaction cancel status (`1` = true, `0` = false)                        |\n| realized              | int    | Transaction realize status (`1` = true, `0` = false)                       |\n| type                  | int    | Can be `add`, `sub` or `period`\t\t                                      |\n| currency              | string | Original transaction currency e.g. `EUR`           \t                \t  |\n| actualCurrency     \t| string | Actual tranasction currency e.g. `USD`\t\t\t\t\t\t\t\t      |\n| amount\t\t\t\t| string | Original transaction value e.g. `14.50` (before conversion `EUR` to `USD`) |\n| actualAmount\t\t\t| string | Actual transaction amount e.g `16.65` (after conversion `EUR` to `USD`)\t  |\n| addedAtGreaterEqual   | string | `>=` Date when Transaction was added (`YYYY-MM-DD hh:mm:ss` 24hr format)   |\n| addedAtLessEqual\t\t| string | `<=` Date when Transaction was added (`YYYY-MM-DD hh:mm:ss` 24hr format)   |\n\n**Available sortings**\n\n* id\n* cancelled\n* realized\n* type\n* currency\n* actualCurrency\n* amount\n* actualAmount\n* addedAt"
               },
               "response": []
+            },
+            {
+              "_postman_id": "9a6a2349-dcf7-4af5-baf2-1f266fbd94f9",
+              "name": "Fetch single wallet transaction",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "22c2d647-8f50-4870-9e94-68d4b0b0501d",
+                    "type": "text/javascript",
+                    "exec": [
+                      ""
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "https://{{workspace}}.igni.co/api/v1/users/wallets/transactions/{{transaction_id}}"
+              },
+              "response": []
             }
           ],
           "_postman_isSubFolder": true
