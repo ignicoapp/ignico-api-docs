@@ -534,7 +534,7 @@
                     }
                   ]
                 },
-                "url": "https://{{workspace}}/api/v1/users/{{user_id}}"
+                "url": "https://{{workspace}}.igni.co/api/v1/users/{{user_id}}"
               },
               "response": []
             },
