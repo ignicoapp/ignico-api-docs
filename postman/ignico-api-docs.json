@@ -902,7 +902,7 @@
                   },
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{token}}"
+                    "value": "Bearer {{access_token}}"
                   }
                 ],
                 "body": {
