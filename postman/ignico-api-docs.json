@@ -835,6 +835,13 @@
           "description": "",
           "item": [
             {
+              "_postman_id": "a5530d69-bf7b-48e0-aa5d-356f7934b208",
+              "name": "Transactions",
+              "description": "",
+              "item": [],
+              "_postman_isSubFolder": true
+            },
+            {
               "_postman_id": "bba73d93-aa7f-4539-ab7b-df831343bd98",
               "name": "List all user wallets",
               "event": [
