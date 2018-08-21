@@ -132,7 +132,7 @@
                 }
               ],
               "request": {
-                "method": "GET",
+                "method": "POST",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -147,36 +147,7 @@
                     "value": "Bearer {{access_token}}"
                   }
                 ],
-                "body": {
-                  "mode": "urlencoded",
-                  "urlencoded": [
-                    {
-                      "key": "grant_type",
-                      "value": "password",
-                      "type": "text"
-                    },
-                    {
-                      "key": "client_id",
-                      "value": "7ec39be9-d753-4033-8167-34b378079bf7",
-                      "type": "text"
-                    },
-                    {
-                      "key": "client_secret",
-                      "value": "mahakam",
-                      "type": "text"
-                    },
-                    {
-                      "key": "username",
-                      "value": "coders@igni.co",
-                      "type": "text"
-                    },
-                    {
-                      "key": "password",
-                      "value": "password123",
-                      "type": "text"
-                    }
-                  ]
-                },
+                "body": {},
                 "url": "https://{{workspace}}.igni.co/api/v1/actions",
                 "description": "**Available filters**\n\n| Name                    | Type   | Description                                                             |\n|-------------------------|--------|-------------------------------------------------------------------------|\n| id                      | string | Action UUID                                                             |\n| cancelled               | int    | 1 = true, 0 = false                                                     |\n| performerEmail          | string | E-mail of user performing actions                                       |\n| paramsValueGreaterEqual | mixed  | `>=` Value that can be compared with Action value (if exists)           |\n| paramsValueLessEqual    | mixed  | `<=` Value that can be compared with Action value (if exists)           |\n| takenAtGreaterEqual     | string | `>=` Date when Action was taken (`YYYY-MM-DD hh:mm:ss` 24hr format)     |\n| takenAtLessEqual        | string | `<=` Date when Action was taken (`YYYY-MM-DD hh:mm:ss` 24hr format)     |\n| cancelledAtGreaterEqual | string | `>=` Date when Action was cancelled (`YYYY-MM-DD hh:mm:ss` 24hr format) |\n| cancelledAtLessEqual    | string | `<=` Date when Action was cancelled (`YYYY-MM-DD hh:mm:ss` 24hr format) |\n\n**Available sortings**\n\n* id\n* cancelled\n* takenAt\n* createdAt"
               },
