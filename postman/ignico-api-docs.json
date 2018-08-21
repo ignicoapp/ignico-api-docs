@@ -213,36 +213,7 @@
                     "value": "Bearer {{access_token}}"
                   }
                 ],
-                "body": {
-                  "mode": "urlencoded",
-                  "urlencoded": [
-                    {
-                      "key": "grant_type",
-                      "value": "password",
-                      "type": "text"
-                    },
-                    {
-                      "key": "client_id",
-                      "value": "7ec39be9-d753-4033-8167-34b378079bf7",
-                      "type": "text"
-                    },
-                    {
-                      "key": "client_secret",
-                      "value": "mahakam",
-                      "type": "text"
-                    },
-                    {
-                      "key": "username",
-                      "value": "coders@igni.co",
-                      "type": "text"
-                    },
-                    {
-                      "key": "password",
-                      "value": "password123",
-                      "type": "text"
-                    }
-                  ]
-                },
+                "body": {},
                 "url": "https://{{workspace}}.igni.co/api/v1/actions/{{action_id}}"
               },
               "response": []
