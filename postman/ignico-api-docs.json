@@ -1039,6 +1039,45 @@
                 "description": "**Request parameters**\n\n| Parameter                  | Type   | Description                                     \t\t  |\n|----------------------------|--------|-----------------------------------------------------------|\n| type                       | string | `transaction`                           \t       \t\t  |\n| attributes.user.email      | string | Email of a user that will be the owner of the transaction |\n| attributes.type            | string | Can be `add` or `sub`                   \t\t \t      |\n| attributes.amount          | mixed  | Transaction amount e.g `16.65`\t\t\t\t\t\t\t  |\n| attributes.description\t | string | Transaction description\t\t\t\t\t    \t\t      |\n\n\n**Additional parameters**\n\n| Parameter  | Type   | Description                                                                  |\n|------------|--------|------------------------------------------------------------------------------|\n| realized   | int    | If the value is `1` the transaction will be automatically marked as realized |\n\nYou can define the transaction owner also via referral Code\n\n\n| Parameter                    | Type   | Description                             \t\t\t\t            |\n|------------------------------|--------|-------------------------------------------------------------------|\n| attributes.user.referralCode | string | Referral code of a user that will be the owner of the transaction |"
               },
               "response": []
+            },
+            {
+              "_postman_id": "d1229c1a-b1c3-48f5-8260-d9b5ad2b9f22",
+              "name": "Cancel the wallet transaction",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "22c2d647-8f50-4870-9e94-68d4b0b0501d",
+                    "type": "text/javascript",
+                    "exec": [
+                      ""
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"transaction\",\n    \"attributes\": {\n      \"cancelled\": true\n    }\n  }\n}\n"
+                },
+                "url": "https://{{workspace}}.igni.co/api/v1/users/wallets/transactions/{{transaction_id}}"
+              },
+              "response": []
             }
           ],
           "_postman_isSubFolder": true
