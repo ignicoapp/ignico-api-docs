@@ -484,7 +484,7 @@
                       "mode": "raw",
                       "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"country\": \"US\",\n        \"referrer\": {\n            \"referrerCode\": \"IS-I8DV62Y8-67\"\n        }\n    }\n  }\n}"
                     },
-                    "url": "http://{{workspace}}/api/v1/users"
+                    "url": "https://{{workspace}}.igni.co/api/v1/users"
                   },
                   "status": "OK",
                   "code": 200,
@@ -517,7 +517,7 @@
                       "mode": "raw",
                       "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"country\": \"US\",\n        \"subject\": {\n          \"person\": {\n            \"firstName\": \"Blanca\",\n            \"lastName\": \"Ojeda\"\n          }\n        }\n    }\n  }\n}"
                     },
-                    "url": "http://{{workspace}}/api/v1/users"
+                    "url": "https://{{workspace}}.igni.co/api/v1/users"
                   },
                   "status": "OK",
                   "code": 200,
@@ -550,7 +550,7 @@
                       "mode": "raw",
                       "raw": "{\n    \"data\": {\n        \"type\": \"user\",\n        \"attributes\": {\n            \"email\": \"blanca.ojeda@example.net\",\n            \"country\": \"US\"\n        }\n    }\n}"
                     },
-                    "url": "http://{{workspace}}/api/v1/users"
+                    "url": "https://{{workspace}}.igni.co/api/v1/users"
                   },
                   "status": "OK",
                   "code": 200,
@@ -583,7 +583,7 @@
                       "mode": "raw",
                       "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"country\": \"US\",\n        \"subject\": {\n          \"company\": {\n          \t\"name\" : \"Ignico\",\n          \t\"representativeSubject\" : {\n            \t\"firstName\": \"Blanca\",\n            \t\"lastName\": \"Ojeda\"\n          \t}\n          }\n        }\n    }\n  }\n}"
                     },
-                    "url": "http://{{workspace}}/api/v1/users"
+                    "url": "https://{{workspace}}.igni.co/api/v1/users"
                   },
                   "status": "OK",
                   "code": 200,
@@ -616,7 +616,7 @@
                       "mode": "raw",
                       "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"country\": \"US\",\n        \"subject\": {\n          \"company\": {\n            \"name\": \"Ignico\"\n          }\n        }\n    }\n  }\n}"
                     },
-                    "url": "http://{{workspace}}/api/v1/users"
+                    "url": "https://{{workspace}}.igni.co/api/v1/users"
                   },
                   "status": "OK",
                   "code": 200,
@@ -649,7 +649,7 @@
                       "mode": "raw",
                       "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"password\": \"FqdX+8dh4KjyHYuR\",\n        \"country\": \"US\",\n        \"subject\": {\n          \"person\": {\n            \"firstName\": \"Blanca\",\n            \"lastName\": \"Ojeda\"\n          }\n        }\n    }\n  }\n}"
                     },
-                    "url": "http://{{workspace}}/api/v1/users"
+                    "url": "https://{{workspace}}.igni.co/api/v1/users"
                   },
                   "status": "OK",
                   "code": 200,
@@ -682,7 +682,7 @@
                       "mode": "raw",
                       "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"country\": \"US\",\n        \"referrer\": {\n            \"email\": \"referrer@example.net\"\n        }\n    }\n  }\n}"
                     },
-                    "url": "http://{{workspace}}/api/v1/users"
+                    "url": "https://{{workspace}}.igni.co/api/v1/users"
                   },
                   "status": "OK",
                   "code": 200,
@@ -715,7 +715,7 @@
                       "mode": "raw",
                       "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"password\": \"FqdX+8dh4KjyHYuR\",\n        \"country\": \"US\"\n    }\n  }\n}"
                     },
-                    "url": "http://{{workspace}}/api/v1/users"
+                    "url": "https://{{workspace}}.igni.co/api/v1/users"
                   },
                   "status": "OK",
                   "code": 200,
@@ -748,7 +748,7 @@
                       "mode": "raw",
                       "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"country\": \"US\",\n        \"subject\": {\n          \"person\": {\n            \"firstName\": \"Blanca\",\n            \"lastName\": \"Ojeda\"\n          }\n        },\n        \"referrer\": {\n            \"email\": \"madelene.nyberg@example.com\"\n        }\n    }\n  }\n}"
                     },
-                    "url": "http://{{workspace}}/api/v1/users"
+                    "url": "https://{{workspace}}.igni.co/api/v1/users"
                   },
                   "status": "OK",
                   "code": 200,
@@ -781,7 +781,7 @@
                       "mode": "raw",
                       "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"password\": \"FqdX+8dh4KjyHYuR\",\n        \"country\": \"US\",\n        \"subject\": {\n          \"person\": {\n            \"firstName\": \"Blanca\",\n            \"lastName\": \"Ojeda\"\n          }\n        },\n        \"referrer\": {\n            \"email\": \"madelene.nyberg@example.com\"\n        }\n    }\n  }\n}"
                     },
-                    "url": "http://{{workspace}}/api/v1/users"
+                    "url": "https://{{workspace}}.igni.co/api/v1/users"
                   },
                   "status": "OK",
                   "code": 200,
@@ -814,7 +814,7 @@
                       "mode": "raw",
                       "raw": "{\n  \"data\": {\n    \"type\": \"user\",\n    \"attributes\": {\n        \"email\": \"blanca.ojeda@example.net\",\n        \"password\": \"FqdX+8dh4KjyHYuR\",\n        \"country\": \"US\",\n        \"referrer\": {\n            \"email\": \"madelene.nyberg@example.com\"\n        }\n    }\n  }\n}"
                     },
-                    "url": "http://{{workspace}}/api/v1/users"
+                    "url": "https://{{workspace}}.igni.co/api/v1/users"
                   },
                   "status": "OK",
                   "code": 200,
