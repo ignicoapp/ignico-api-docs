@@ -225,7 +225,7 @@
                   "raw": "{\n  \"data\": {\n    \"type\": \"action\",\n    \"attributes\": {\n      \"type\": \"action_type\",\n      \"title\": \"action_title\",\n      \"takenAt\": \"YYYY-MM-DD HH:MM:SS\",\n      \"performer\": {\n        \"email\": \"some_email\"\n      },\n      \"params\": {\n        \"value\": \"some_value\"\n      }\n    }\n  }\n}"
                 },
                 "url": "https://{{workspace}}.igni.co/api/v1/actions",
-                "description": "**Request parameters**\n\n| Parameter                  | Type   | Description                               |\n|----------------------------|--------|-------------------------------------------|\n| type                       | string | `action`                                  |\n| attributes.type            | string | Slug from declared active Action Types  (e.g. `transaction`, `event`, `sign-up`)  |\n| attributes.title           | string | Title of the Action                       |\n| attributes.takenAt         | string | Date when the Action was taken            |\n| attributes.performer.email | int    | Email of User that performed the Action   |\n| attributes.referrer.email | int    | Email of User that referred the Action   |\n| attributes.params.value    | mixed  | Value (only for Action Type with parameter `value`)       |\n| attributes.params.points   | mixed  | Points (only for Action Type with parameter `points`)      |"
+                "description": "**Request parameters**\n\n| Parameter                  | Type   | Description                               |\n|----------------------------|--------|-------------------------------------------|\n| type                       | string | `action`                                  |\n| attributes.type            | string | Slug from declared active Action Types  (e.g. `transaction`, `event`, `sign-up`)  |\n| attributes.title           | string | Title of the Action                       |\n| attributes.takenAt         | string | Date when the Action was taken            |\n| attributes.performer.email | string    | Email of User that performed the Action   |\n| attributes.referrer.email | string    | Email of User that referred the Action   |\n| attributes.params.value    | mixed  | Value (only for Action Type with parameter `value`)       |\n| attributes.params.points   | mixed  | Points (only for Action Type with parameter `points`)      |"
               },
               "response": [
                 {
@@ -430,10 +430,10 @@
                   "listen": "test",
                   "script": {
                     "id": "91833fe3-9e11-4e0d-aa15-e24ecd907ec3",
-                    "type": "text/javascript",
                     "exec": [
                       ""
-                    ]
+                    ],
+                    "type": "text/javascript"
                   }
                 }
               ],
